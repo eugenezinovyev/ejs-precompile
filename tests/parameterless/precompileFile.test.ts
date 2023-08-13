@@ -97,3 +97,24 @@ test('compiles template file without parameters with relative paths', async () =
 
     global.process = originalProcess;
 });
+
+test('compiles template file to typescript', async () => {
+    const outputPath = resolve(outputDir, `${nanoid()}.ts`);
+    const template = await precompileFile({
+        inputPath: inputPath,
+        outputPath: outputPath,
+        ...templateOptions,
+        options: {
+            language: 'typescript',
+        },
+        write: true,
+    });
+
+    const output = await template.templateFunction();
+
+    expect(template.inputContent).toBe('Hello, world!');
+    expect(template.outputContent).toContain('function anonymous');
+    expect(template.templateFunction).toBeInstanceOf(Function);
+    await expect(access(outputPath)).resolves.not.toThrow();
+    expect(output).toBe('Hello, world!');
+});

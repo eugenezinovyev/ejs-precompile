@@ -16,6 +16,12 @@ Available variables: [name, ext, lang-ext].
 `,
         '[name].template[lang-ext]',
     )
+    .option(
+        '-l, --language <language>',
+        `Language of the output file. Default is "javascript".
+Available languages: [javascript, typescript].`,
+        'js',
+    )
     .allowUnknownOption()
     .action(precompileCommand);
 

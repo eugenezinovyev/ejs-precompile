@@ -21,6 +21,7 @@ type Language = Exclude<ResolveOutputFilenameOptions['language'], undefined>;
 
 const extMap = new Map<Language, string>([
     ['javascript', '.js'],
+    ['typescript', '.ts'],
 ]);
 
 type Replacer = (filename: string) => string;

@@ -1,16 +1,19 @@
 ﻿import { compile } from 'ejs';
 import { mkdir, stat } from 'node:fs/promises';
 import { isAbsolute, resolve, extname } from 'node:path';
-import resolveOutputFilename from '../precompile/resolve-output-filename.js';
+import resolveOutputFilename, { type ResolveOutputFilenameOptions } from '../precompile/resolve-output-filename.js';
 import precompileFile from '../precompile/precompile-file.js';
 import precompileDirectory from '../precompile/precompile-directory.js';
 
 export type EjsCompileOptions = Parameters<typeof compile>[1];
 
+export type OutputLanguage = 'javascript' | 'typescript';
+
 export type PrecompileCommandOptions = {
     input: string;
     output: string;
     file?: string;
+    language?: OutputLanguage;
 };
 
 export default async function precompile(options: PrecompileCommandOptions) {
@@ -27,6 +30,10 @@ export default async function precompile(options: PrecompileCommandOptions) {
         client: true,
         strict: true,
     };
+    const precompileOptions: ResolveOutputFilenameOptions = {
+        language: options.language ?? 'javascript',
+        fileNameTemplate: options.file,
+    };
 
     const inputIsDirectory = await isDirectory(resolvedInputPath);
 
@@ -40,17 +47,19 @@ export default async function precompile(options: PrecompileCommandOptions) {
             outputPath: resolvedOutputPath,
             fileNameTemplate: options.file,
             compileOptions,
+            options: precompileOptions,
             write: true
         });
     } else {
         const outputPath = outputToDirectory
-            ? resolve(resolvedOutputPath, resolveOutputFilename(resolvedInputPath))
+            ? resolve(resolvedOutputPath, resolveOutputFilename(resolvedInputPath, { language: options.language ?? 'javascript' }))
             : resolvedOutputPath;
 
         await precompileFile({
             inputPath: resolvedInputPath,
             outputPath: outputPath,
             compileOptions,
+            options: precompileOptions,
             write: true
         });
     }
