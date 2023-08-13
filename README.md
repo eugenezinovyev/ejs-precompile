@@ -1,5 +1,10 @@
 # EJS Precompile
 
+[![Build & Test](https://github.com/eugenezinovyev/ejs-precompile/actions/workflows/main.yml/badge.svg)](https://github.com/eugenezinovyev/ejs-precompile/actions/workflows/main.yml)
+[![codecov](https://codecov.io/gh/eugenezinovyev/ejs-precompile/branch/main/graph/badge.svg?token=JU7UVADLIZ)](https://codecov.io/gh/eugenezinovyev/ejs-precompile)
+[![Known Vulnerabilities](https://snyk.io/test/github/eugenezinovyev/ejs-precompile/badge.svg)](https://snyk.io/test/github/eugenezinovyev/ejs-precompile)
+[![npm version](https://badge.fury.io/js/ejs-precompile.svg)](https://www.npmjs.com/package/ejs-precompile)
+
 This package is a CLI tool to precompile EJS templates into JavaScript functions.
 Additionally, it provides a Node.js API to precompile EJS templates.
 
