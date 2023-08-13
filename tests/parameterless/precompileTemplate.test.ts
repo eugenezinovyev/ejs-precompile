@@ -4,8 +4,8 @@ import { precompileTemplate, PrecompileTemplateOptions } from '../../src/api.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const inputPath = resolve(__dirname, './template.ejs');
-const outputDir = resolve(__dirname, './templates');
+const inputPath = resolve(__dirname, './templates/template.ejs');
+const outputDir = resolve(__dirname, './output');
 
 const templateOptions: Pick<PrecompileTemplateOptions, 'options' | 'compileOptions'> = {
     compileOptions: {

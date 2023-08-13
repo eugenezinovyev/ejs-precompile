@@ -12,5 +12,10 @@ export {
 } from './precompile/precompile-file.js';
 
 export {
+    default as precompileDirectory,
+    PrecompileDirectoryOptions,
+} from './precompile/precompile-directory.js';
+
+export {
     default as resolveOutputFilename,
 } from './precompile/resolve-output-filename.js';

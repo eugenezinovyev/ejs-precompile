@@ -6,8 +6,8 @@ import precompileCommand from '../../src/commands/precompile.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const inputPath = resolve(__dirname, './template.ejs');
-const outputDir = resolve(__dirname, './templates');
+const inputPath = resolve(__dirname, './templates/template.ejs');
+const outputDir = resolve(__dirname, './output');
 
 test('compiles template file without parameters with relative paths', async () => {
     const originalProcess = process;
@@ -43,4 +43,23 @@ test('compiles template file without parameters to output file', async () => {
     })).resolves.not.toThrow();
 
     await expect(access(outputPath)).resolves.not.toThrow();
+});
+
+test('compiles templates directory without parameters', async () => {
+    const outputPath = resolve(__dirname, 'directory-output', nanoid());
+    await expect(precompileCommand({
+        input: resolve(__dirname, './templates'),
+        output: outputPath,
+    })).resolves.not.toThrow();
+
+    await expect(access(resolve(outputPath, 'template.template.js'))).resolves.not.toThrow();
+});
+
+
+test('throws error when output path is not a directory', async () => {
+    const outputPath = resolve(__dirname, 'directory-output', nanoid());
+    await expect(precompileCommand({
+        input: resolve(__dirname, './templates'),
+        output: resolve(outputPath, './templates/template.js'),
+    })).rejects.toThrow();
 });

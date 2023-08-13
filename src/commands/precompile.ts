@@ -3,6 +3,7 @@ import { mkdir, stat } from 'node:fs/promises';
 import { isAbsolute, resolve, extname } from 'node:path';
 import resolveOutputFilename from '../precompile/resolve-output-filename.js';
 import precompileFile from '../precompile/precompile-file.js';
+import precompileDirectory from '../precompile/precompile-directory.js';
 
 export type EjsCompileOptions = Parameters<typeof compile>[1];
 
@@ -26,16 +27,31 @@ export default async function precompile(options: PrecompileCommandOptions) {
         strict: true,
     };
 
-    const outputPath = outputToDirectory
-        ? resolve(resolvedOutputPath, resolveOutputFilename(resolvedInputPath))
-        : resolvedOutputPath;
+    const inputIsDirectory = await isDirectory(resolvedInputPath);
 
-    await precompileFile({
-        inputPath: resolvedInputPath,
-        outputPath: outputPath,
-        compileOptions,
-        write: true
-    });
+    if (inputIsDirectory) {
+        if (!outputToDirectory) {
+            throw new Error('Output path should be a directory when input path is a directory.');
+        }
+
+        await precompileDirectory({
+            inputPath: resolvedInputPath,
+            outputPath: resolvedOutputPath,
+            compileOptions,
+            write: true
+        });
+    } else {
+        const outputPath = outputToDirectory
+            ? resolve(resolvedOutputPath, resolveOutputFilename(resolvedInputPath))
+            : resolvedOutputPath;
+
+        await precompileFile({
+            inputPath: resolvedInputPath,
+            outputPath: outputPath,
+            compileOptions,
+            write: true
+        });
+    }
 }
 
 async function isDirectory(path: string): Promise<boolean> {
