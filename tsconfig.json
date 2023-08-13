@@ -1,0 +1,25 @@
+﻿{
+  "compilerOptions": {
+    "charset": "utf8",
+    "module": "NodeNext",
+    "target": "ESNext",
+    "moduleResolution": "NodeNext",
+    "noEmitOnError": true,
+    "strict": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationDir": "dist",
+    "esModuleInterop": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitThis": true,
+    "noImplicitReturns": true,
+    "noImplicitAny": true,
+    "allowUnreachableCode": false,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "allowJs": false,
+    "checkJs": false
+  }
+}
