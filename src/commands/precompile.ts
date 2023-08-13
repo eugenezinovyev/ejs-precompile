@@ -10,6 +10,7 @@ export type EjsCompileOptions = Parameters<typeof compile>[1];
 export type PrecompileCommandOptions = {
     input: string;
     output: string;
+    file?: string;
 };
 
 export default async function precompile(options: PrecompileCommandOptions) {
@@ -37,6 +38,7 @@ export default async function precompile(options: PrecompileCommandOptions) {
         await precompileDirectory({
             inputPath: resolvedInputPath,
             outputPath: resolvedOutputPath,
+            fileNameTemplate: options.file,
             compileOptions,
             write: true
         });

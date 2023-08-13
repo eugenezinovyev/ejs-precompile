@@ -1,4 +1,4 @@
-﻿import { basename } from 'node:path';
+﻿import { basename, extname } from 'node:path';
 import { PrecompileOptions } from './precompile-template.js';
 
 export type ResolveOutputFilenameOptions = {
@@ -7,15 +7,38 @@ export type ResolveOutputFilenameOptions = {
      * @default 'javascript'
      */
     language?: PrecompileOptions['language'];
+
+    /**
+     * Output file name template. Available variables: [name, ext, lang-ext].
+     * @default '[name].template[lang-ext]'
+     */
+    fileNameTemplate?: string;
 };
 
-const extMap = new Map<ResolveOutputFilenameOptions['language'], string>([
+const defaultFileNameTemplate = '[name].template[lang-ext]';
+
+type Language = Exclude<ResolveOutputFilenameOptions['language'], undefined>;
+
+const extMap = new Map<Language, string>([
     ['javascript', '.js'],
 ]);
 
-export default function resolveOutputFilename(input: string, options?: ResolveOutputFilenameOptions): string {
-    const language = options?.language ?? 'javascript';
-    const ext = extMap.get(language);
+type Replacer = (filename: string) => string;
 
-    return `${(basename(input, '.ejs'))}.template${ext}`;
+const nameReplacer = (inputFilename: string): Replacer => (filename) =>
+    filename.replace(/\[name]/g, basename(inputFilename, extname(inputFilename)));
+const extReplacer = (inputFilename: string): Replacer => (filename) => filename.replace(/\[ext]/g, extname(inputFilename));
+const langExtReplacer = (language: Language): Replacer => (filename) => filename.replace(/\[lang-ext]/g, extMap.get(language)!);
+
+export default function resolveOutputFilename(inputFilename: string, options?: ResolveOutputFilenameOptions): string {
+    const language = options?.language ?? 'javascript';
+    const replacers: Replacer[] = [
+        nameReplacer(inputFilename),
+        extReplacer(inputFilename),
+        langExtReplacer(language),
+    ];
+
+    const fileNameTemplate = options?.fileNameTemplate ?? defaultFileNameTemplate;
+
+    return replacers.reduce((filename, replacer) => replacer(filename), fileNameTemplate);
 }

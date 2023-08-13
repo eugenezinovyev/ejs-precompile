@@ -16,6 +16,12 @@ export type PrecompileDirectoryOptions = {
     outputPath: string;
 
     /**
+     * Output file name template, to be used together when input is directory. Available variables: [name, ext, lang-ext].
+     * @default '[name].template[lang-ext]'
+     */
+    fileNameTemplate?: string;
+
+    /**
      * EJS compile options.
      */
     compileOptions: EjsCompileOptions;
@@ -53,12 +59,19 @@ export default async function precompileDirectory(options: PrecompileDirectoryOp
 
     return await Promise.all(files
         .filter((file) => extname(file) === '.ejs')
-        .map(async (filename) => await precompileFile({
-            inputPath: resolve(inputPath, filename),
-            outputPath: resolve(outputPath, resolveOutputFilename(filename, { language: options.options?.language })),
-            compileOptions: options.compileOptions,
-            write: options.write,
-            defaults: options.defaults,
-            options: options.options,
-        })));
+        .map(async (filename) => {
+            
+
+            return await precompileFile({
+                inputPath: resolve(inputPath, filename),
+                outputPath: resolve(outputPath, resolveOutputFilename(filename, {
+                    language: options.options?.language,
+                    fileNameTemplate: options.fileNameTemplate,
+                })),
+                compileOptions: options.compileOptions,
+                write: options.write,
+                defaults: options.defaults,
+                options: options.options,
+            });
+        }));
 }
