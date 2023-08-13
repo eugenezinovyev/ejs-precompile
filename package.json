@@ -15,6 +15,9 @@
   "scripts": {
     "prebuild": "rimraf dist && tsc",
     "build": "ts-node --esm esbuild.ts",
+    "presamples": "npm run build",
+    "samples": "node ./dist/cli.js -i ./samples -o ./samples -l typescript",
+    "postsamples": "ts-node --esm ./samples/run-samples.ts",
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest"
   },
   "keywords": [

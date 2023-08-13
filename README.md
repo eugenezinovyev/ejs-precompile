@@ -15,6 +15,37 @@ or locally in your project
 npm install --save-dev ejs-precompile
 ```
 
+## Samples
+
+Please check [samples](./samples) directory for more details.
+
+## Template Variables
+
+Template variables can be passed to the template function as an object.
+The object can be passed as a first argument to the template function.
+
+Variables can be accessed in the template using `locals` object.
+
+```javascript
+const renderedTemplate = template.templateFunction({
+    name: 'John',
+});
+```
+
+## Default Values
+
+Default values for template variables can be passed to the precompile function as an object.
+
+```javascript
+const template = await precompileTemplate({
+    templateString: 'Hello, <%= locals.name %>!',
+    defaults: {
+        name: 'John',
+    },
+});
+const renderedTemplate = template.templateFunction();
+```
+
 ## CLI Usage
 
 ```bash
