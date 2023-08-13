@@ -1,6 +1,11 @@
 ﻿import { program } from 'commander';
 import precompileCommand from './commands/precompile.js';
 
+function ejsOption(description: string): string {
+    return `${description}
+Please check EJS documentation for more details.`;
+}
+
 program
     .name('ejs-precompile')
     .description('Precompile EJS templates into JavaScript modules.')
@@ -22,6 +27,8 @@ Available variables: [name, ext, lang-ext].
 Available languages: [javascript, typescript].`,
         'js',
     )
+    .option('--ejs.client', ejsOption('Returns standalone compiled function.'), true)
+    .option('--ejs.strict', ejsOption('When set to `true`, generated function is in strict mode.'), true)
     .allowUnknownOption()
     .action(precompileCommand);
 

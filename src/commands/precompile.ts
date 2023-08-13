@@ -14,6 +14,8 @@ export type PrecompileCommandOptions = {
     output: string;
     file?: string;
     language?: OutputLanguage;
+    'ejs.client': boolean;
+    'ejs.strict': boolean;
 };
 
 export default async function precompile(options: PrecompileCommandOptions) {
@@ -27,8 +29,8 @@ export default async function precompile(options: PrecompileCommandOptions) {
     }
 
     const compileOptions: EjsCompileOptions = {
-        client: true,
-        strict: true,
+        client: options['ejs.client'],
+        strict: options['ejs.strict'],
     };
     const precompileOptions: ResolveOutputFilenameOptions = {
         language: options.language ?? 'javascript',
