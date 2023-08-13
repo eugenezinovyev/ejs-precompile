@@ -28,7 +28,10 @@ const jestConfig: JestConfigWithTsJest = {
     ],
     coverageReporters: [
         '@lcov-viewer/istanbul-report' as CoverageReporterName,
-        'html'
+        'text',
+        'json',
+        'lcovonly',
+        'html',
     ],
 };
 
